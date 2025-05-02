@@ -1,0 +1,6 @@
+name: Plugin Name
+author: Plugin Author
+version: v1.0.0
+description: |
+  This is a description of the plugin.
+requires_thor: v11.0.0
