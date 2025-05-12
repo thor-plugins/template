@@ -1,0 +1,37 @@
+name: Create Release on Tag
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to create a release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24
+      - name: Use jsonlog token
+        run: |
+          git config --global url."https://${{ secrets.JSONLOG_ACCESS_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          export GOPRIVATE=github.com/NextronSystems/*
+      - name: Install dependencies
+        run: |
+          go mod download
+          go mod vendor
+          # thor-plugin and jsonlog are provided by THOR and don't need to be included in the plugin
+          rm -rf vendor/github.com/NextronSystems/thor-plugin vendor/github.com/NextronSystems/jsonlog
+      - name: Create Plugin ZIP
+        run: |
+          # Create a zip file of the plugin
+          zip -r plugin.zip . --include metadata.yml --include "*.go"
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            plugin.zip
