@@ -18,3 +18,10 @@ Then, make sure to adjust the following files:
 - `README.md`: Update the description and usage instructions for your plugin.
 - `metadata.yml`: Update the metadata for your plugin, including the name, version, and description.
 - `plugin.go`: Update the plugin code to implement the desired functionality.
+
+## Publishing
+
+To create a new release of your plugin, create a new tag in the format `vX.Y.Z` where `X.Y.Z` is the version number.
+
+This will trigger the GitHub actions to create a new release.
+The release will contain a `plugin.zip` file that can be placed in the `plugins/` directory of your THOR installation.
